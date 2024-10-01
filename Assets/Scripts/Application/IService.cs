@@ -1,11 +1,9 @@
-using UnityEngine.Events;
-
 namespace Application
 {
-    public abstract class AService
+    public interface IService
     {
-        public delegate void HandleResponse(string messageID, object data);
-        public delegate void HandleError(string messageID, string error);
-        public abstract string MessageID();
+        public string MessageID();
+        public void Init(object data);
+        public void Execute();
     }
 }

@@ -4,26 +4,28 @@ using UnityEngine;
 namespace Application.Services
 {
     [System.Serializable]
-    public class PlayerService : AService
+    public class LoadPlayerService : IService
     {
         private const string CharacterDataJson = "ChillStoryCharacterData";
-        private CharacterData _data = new();
+        private CharacterData _data;
 
 
-        public void SendRequest()
+        public string MessageID()
+        {
+            return Application.MessageID.PlayerData;
+        }
+
+        public void Init(object data)
+        {
+            if (data is CharacterData d) _data = d;
+            else Debug.LogError("LoadPlayerService data must be CharacterData and not null");
+        }
+
+        public void Execute()
         {
             var json = PlayerPrefs.GetString(CharacterDataJson);
             if (string.IsNullOrEmpty(json)) PlayerPrefs.SetString(CharacterDataJson, JsonUtility.ToJson(_data));
-            else _data = JsonUtility.FromJson<CharacterData>(json);
-
-            Debug.Log("Done Player Service");
-
-            _handleResponse?.Invoke(MessageID(), _data);
-        }
-
-        public override string MessageID()
-        {
-            return Application.MessageID.PlayerData;
+            else _data.Renew(JsonUtility.FromJson<CharacterData>(json));
         }
     }
 }

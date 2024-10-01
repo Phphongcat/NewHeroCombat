@@ -1,7 +1,7 @@
 namespace Application
 {
-    public class MessageID
+    public static class MessageID
     {
-        
+        public const string PlayerData = "ChillStoryPlayerData";
     }
 }
